@@ -1,50 +1,52 @@
 <template>
-  <v-app id="inspire">
-    <v-content>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col class="text-center">
-            <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Name</th>
-                    <th class="text-left">Calories</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="item in listRated" :key="item">
-                    <td>{{ item }}</td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-content>
-  </v-app>
+  <v-content>
+    <v-container fluid >
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left" width="8%">NO</th>
+              <th class="text-left">LINK</th>
+              <th class="text-left">RATING</th>
+              <th class="text-left">JML VOTE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in listRated" :key="item">
+              <td>{{ index + 1 }}</td>
+              <td><a :href="'https://lagudaerah.id/' + item" target="_blank">https://lagudaerah.id/{{ item }}</a></td>
+              <td>{{ sumRating("adi-sayang") }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </v-container>
+  </v-content>
 </template>
 
 <script>
 export default {
   data: () => ({
     drawer: null,
+    rating: 0,
     listRated: []
   }),
 
   methods: {
-    listContent (page) {
+    listCollections () {
       this.$axios.get(`${this.serverUrl}/app/rated`)
         .then(response => {
           this.listRated = response.data
-          console.log(this.listRated)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+
+    sumRating (slug) {
+      this.$axios.get(`${this.serverUrl}/app/rating/${slug}`)
+        .then(response => {
+          return response.data.reduce((a, b) => a + b) / response.data.length
         })
         .catch(error => {
           console.log(error)
@@ -53,7 +55,8 @@ export default {
   },
 
   mounted () {
-    this.listContent()
+    this.listCollections()
+    this.sumRating('seni-rupa')
   }
 
 }

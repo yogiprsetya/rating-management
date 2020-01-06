@@ -1,9 +1,9 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <navbar/>
     <router-view/>
     <footers/>
-  </div>
+  </v-app>
 </template>
 
 <script>
