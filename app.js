@@ -10,6 +10,7 @@ let rate = (slug, i) => {
   .then((res) => {
     res.json().then(data => {
       document.getElementsByClassName("rate")[i].innerHTML += (data.reduce((a, b) => a + b) / data.length).toFixed(2)
+      document.getElementsByClassName("jml")[i].innerHTML += data.length
     }).catch((err) => {
         console.log(err);
     })
@@ -28,6 +29,7 @@ function getRate() {
           <td>${i + 1}</td>
           <td><a href="https://lagudaerah.id/${data[i]}" target="blank">${data[i]}</a></td>
           <td class="rate"></td>
+          <td class="jml"></td>
         </tr>
       `
     }
